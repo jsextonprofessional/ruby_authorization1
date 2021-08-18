@@ -8,8 +8,11 @@ class SessionsController < ApplicationController
 
   def create
     puts 'login user'
-    session[:user_id] = 1
-    redirect_to '/users/:id'
+    @user = User.find_by_email(params[:email])
+    if @user && @user.authenticate(params[:password])
+    session[:user_id] = @user.id
+    redirect_to "/users/#{@user.id}"
+    end
   end
 
   def destroy
